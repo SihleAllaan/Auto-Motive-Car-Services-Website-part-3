@@ -57,6 +57,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 const fields = Array.from(new FormData(form).entries());
                 const body = fields.map(([name, value]) => `${name}: ${value}`).join('\n');
                 const subject = form.dataset.emailSubject || document.title;
+                const mailto = `mailto:sales@automotivecarservices.co.za?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+                if (form.dataset.requireVehicle !== undefined) {
+                    const emailDraft = document.createElement('section');
+                    emailDraft.dataset.emailDraft = '';
+                    emailDraft.setAttribute('aria-label', 'Prepared vehicle enquiry email');
+
+                    const heading = document.createElement('h3');
+                    heading.textContent = 'Your enquiry email is ready';
+
+                    const instructions = document.createElement('p');
+                    instructions.setAttribute('role', 'status');
+                    instructions.textContent = 'Your email app should open with this enquiry ready. If it does not, copy the draft below into an email addressed to sales@automotivecarservices.co.za.';
+
+                    const emailLink = document.createElement('a');
+                    emailLink.href = mailto;
+                    emailLink.className = 'email-draft-link';
+                    emailLink.textContent = 'Open email app';
+
+                    const preview = document.createElement('textarea');
+                    preview.className = 'email-draft-preview';
+                    preview.setAttribute('aria-label', 'Prepared email subject and message');
+                    preview.readOnly = true;
+                    preview.rows = 10;
+                    preview.value = `To: sales@automotivecarservices.co.za\nSubject: ${subject}\n\n${body}`;
+
+                    emailDraft.append(heading, instructions, emailLink, preview);
+                    form.querySelector('[data-email-draft]')?.remove();
+                    form.appendChild(emailDraft);
+                    window.location.href = mailto;
+                    return;
+                }
+
                 const status = form.querySelector('[data-form-status]') || document.createElement('p');
                 status.dataset.formStatus = '';
                 status.setAttribute('role', 'status');
@@ -65,7 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     form.appendChild(status);
                 }
 
-                const mailto = `mailto:sales@automotivecarservices.co.za?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
                 window.location.href = mailto;
             });
         }
