@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create a vehicle enquiry cart with Auto Motive Car Services and submit your preferred cars for follow-up.">
+    <meta name="keywords" content="vehicle enquiry cart, car enquiry, Auto Motive cart">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://automotivecarservices.co.za/cart.html">
+    <title>My Cart | AUTO MOTIVE</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Universal site header and navigation -->
+    <header>
+        <h1>AUTO MOTIVE CAR SERVICES</h1>
+        <p>New & Used Vehicles</p>
+
+        <nav>
+            <a href="index.html">Home</a> |
+            <a href="vehicles.html">Vehicles for Sale</a> |
+            <a href="finance.html">Finance</a> |
+            <a href="test-drive.html">Book a Test Drive</a> |
+            <a href="gallery.html">Gallery</a> |
+            <a href="reviews.html">Customer Reviews</a> |
+            <a href="contact.html">Contact Us</a> |
+            <a href="enquiry.html">General Enquiry</a> |
+            <a href="cart.html">My Cart</a>
+        </nav>
+
+        <hr>
+    </header>
+
+    <!-- Enquiry cart form for selected vehicles -->
+    <main>
+
+        <!-- Customer can select vehicles and send an enquiry -->
+        <section id="cart">
+
+            <h2>My Vehicle Enquiry Cart</h2>
+
+            <p>
+                Select the vehicles you are interested in and submit
+                an enquiry to our sales team.
+            </p>
+
+            <form class="enquiry-form" action="mailto:sales@automotivecarservices.co.za" method="post" enctype="text/plain" data-email-subject="Vehicle enquiry cart" data-require-vehicle>
+
+                <fieldset>
+
+                    <legend>Select Vehicles</legend>
+
+                    <div id="cartVehicleList">
+                        <p class="cart-empty-message">No vehicles selected yet.</p>
+                    </div>
+
+                </fieldset>
+
+                <br>
+
+                <h3>Customer Details</h3>
+
+                <label for="cartName">
+                    Full Name:
+                </label>
+
+                <input type="text"
+                       id="cartName"
+                       name="cartName"
+                       required>
+
+                <br><br>
+
+                <label for="cartEmail">
+                    Email:
+                </label>
+
+                <input type="email"
+                       id="cartEmail"
+                       name="cartEmail"
+                       required>
+
+                <br><br>
+
+                <label for="cartPhone">
+                    Phone:
+                </label>
+
+                <input type="tel"
+                       id="cartPhone"
+                       name="cartPhone">
+
+                <br><br>
+
+                <label for="cartMessage">
+                    Enquiry:
+                </label>
+
+                <br>
+
+                <textarea id="cartMessage"
+                          name="cartMessage"
+                          rows="5"
+                          cols="40"
+                          placeholder="Tell us which vehicle you are interested in"></textarea>
+
+                <br><br>
+
+                <input type="submit"
+                       value="Submit Vehicle Enquiry">
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <footer>
+
+        <hr>
+
+        <h3>Auto Motive Car Services</h3>
+
+        <p>
+            Quality New & Used Vehicles
+        </p>
+
+        <p>
+            Phone: 012 345 6789
+        </p>
+
+        <p>
+            Email: sales@automotivecarservices.co.za
+        </p>
+
+        <nav>
+            <a href="index.html">Home</a> |
+            <a href="vehicles.html">Vehicles</a> |
+            <a href="finance.html">Finance</a> |
+            <a href="test-drive.html">Test Drive</a> |
+            <a href="gallery.html">Gallery</a> |
+            <a href="reviews.html">Reviews</a> |
+            <a href="contact.html">Contact</a>
+            | <a href="enquiry.html">General Enquiry</a> |
+            <a href="cart.html">My Cart</a> |
+            <a href="references.html">References</a>
+        </nav>
+
+        <p>
+            &copy; 2026 Auto Motive Car Services. All Rights Reserved.
+        </p>
+
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

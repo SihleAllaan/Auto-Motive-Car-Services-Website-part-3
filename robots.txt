@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://automotivecarservices.co.za/sitemap.xml

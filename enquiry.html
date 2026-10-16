@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Send Auto Motive Car Services a general enquiry about vehicles, finance, test drives, or dealership services.">
+    <meta name="keywords" content="car dealership enquiry, vehicle enquiry, Auto Motive services">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://automotivecarservices.co.za/enquiry.html">
+    <title>General Enquiry | AUTO MOTIVE</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <h1>AUTO MOTIVE CAR SERVICES</h1>
+        <p>New &amp; Used Vehicles</p>
+        <nav>
+            <a href="index.html">Home</a> |
+            <a href="vehicles.html">Vehicles for Sale</a> |
+            <a href="finance.html">Finance</a> |
+            <a href="test-drive.html">Book a Test Drive</a> |
+            <a href="gallery.html">Gallery</a> |
+            <a href="reviews.html">Customer Reviews</a> |
+            <a href="contact.html">Contact Us</a> |
+            <a href="enquiry.html" aria-current="page">General Enquiry</a> |
+            <a href="cart.html">My Cart</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="enquiry">
+            <h2>General Enquiry</h2>
+            <p>Send a question about a vehicle, finance, test drive, or another dealership service.</p>
+
+            <form class="enquiry-form" action="mailto:sales@automotivecarservices.co.za" method="post" enctype="text/plain" data-email-subject="General website enquiry">
+                <label for="enquiryName">Full Name:</label>
+                <input type="text" id="enquiryName" name="Full name" autocomplete="name" required minlength="2">
+
+                <label for="enquiryEmail">Email:</label>
+                <input type="email" id="enquiryEmail" name="Email" autocomplete="email" required>
+
+                <label for="enquiryPhone">Phone Number:</label>
+                <input type="tel" id="enquiryPhone" name="Phone number" autocomplete="tel" pattern="[0-9+() -]{7,20}" title="Enter 7 to 20 digits, spaces, or phone symbols.">
+
+                <label for="enquiryType">Enquiry Type:</label>
+                <select id="enquiryType" name="Enquiry type" required>
+                    <option value="">Select a topic</option>
+                    <option>Vehicle availability</option>
+                    <option>Finance</option>
+                    <option>Test drive</option>
+                    <option>Other service</option>
+                </select>
+
+                <label for="enquiryMessage">Message:</label>
+                <textarea id="enquiryMessage" name="Message" rows="7" required minlength="10" placeholder="How can our team help?"></textarea>
+
+                <input type="submit" value="Prepare Enquiry Email">
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <h3>Auto Motive Car Services</h3>
+        <p>Phone: 012 345 6789</p>
+        <p>Email: <a href="mailto:sales@automotivecarservices.co.za">sales@automotivecarservices.co.za</a></p>
+        <nav>
+            <a href="index.html">Home</a> |
+            <a href="vehicles.html">Vehicles</a> |
+            <a href="finance.html">Finance</a> |
+            <a href="test-drive.html">Test Drive</a> |
+            <a href="gallery.html">Gallery</a> |
+            <a href="reviews.html">Reviews</a> |
+            <a href="contact.html">Contact</a> |
+            <a href="enquiry.html" aria-current="page">General Enquiry</a> |
+            <a href="cart.html">My Cart</a> |
+            <a href="references.html">References</a>
+        </nav>
+        <p>&copy; 2026 Auto Motive Car Services. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
