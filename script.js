@@ -126,6 +126,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.querySelectorAll('#gallery img, img[alt*="Vehicle"], img[alt*="Toyota"], img[alt*="Volkswagen"], img[alt*="BMW"], img[alt*="Gallery Image"]').forEach((image) => {
             image.addEventListener('click', () => {
+                if (!modalImage) {
+                    return;
+                }
                 modalImage.src = image.src;
                 modalImage.alt = image.alt;
                 modal.classList.add('visible');
@@ -133,10 +136,12 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        closeButton.addEventListener('click', () => {
-            modal.classList.remove('visible');
-            modal.setAttribute('aria-hidden', 'true');
-        });
+        if (closeButton) {
+            closeButton.addEventListener('click', () => {
+                modal.classList.remove('visible');
+                modal.setAttribute('aria-hidden', 'true');
+            });
+        }
 
         modal.addEventListener('click', (event) => {
             if (event.target === modal) {
@@ -176,61 +181,93 @@ document.addEventListener('DOMContentLoaded', () => {
     const vehicleTable = document.getElementById('vehicleComparisonTable');
 
     if (vehicleSearchForm && vehicleTable) {
-        const defaultVehicleOrder = Array.from(
-            vehicleTable.querySelectorAll('thead th[data-name]'),
-            (header) => header.dataset.name
-        );
+        const headerRow = vehicleTable.querySelector('thead tr');
+        if (headerRow) {
+            const defaultHeaders = Array.from(headerRow.querySelectorAll('th[data-name]'));
+            const defaultIndexByName = new Map(defaultHeaders.map((header, index) => [header.dataset.name, index]));
 
-        vehicleSearchForm.addEventListener('submit', (event) => {
-            event.preventDefault();
+            const sortHeaders = (headers, sortOrder) => {
+                const orderedHeaders = [...headers];
 
-            const query = document.getElementById('searchVehicle').value.trim().toLowerCase();
-            const selectedType = document.getElementById('vehicleType').value;
-            const maxPrice = Number(document.getElementById('price').value || 0);
-            const headerRow = vehicleTable.querySelector('thead tr');
-            const headers = Array.from(headerRow.querySelectorAll('th[data-name]'));
-            const rows = Array.from(vehicleTable.querySelectorAll('tbody tr'));
-            const sortOrder = document.getElementById('sortVehicles')?.value || 'default';
-            const resultStatus = document.getElementById('vehicleSearchStatus');
-            let matchCount = 0;
-
-            if (sortOrder === 'name') {
-                headers.sort((first, second) => first.dataset.name.localeCompare(second.dataset.name));
-            } else if (sortOrder === 'price-low') {
-                headers.sort((first, second) => Number(first.dataset.price) - Number(second.dataset.price));
-            } else if (sortOrder === 'price-high') {
-                headers.sort((first, second) => Number(second.dataset.price) - Number(first.dataset.price));
-            } else {
-                headers.sort((first, second) => defaultVehicleOrder.indexOf(first.dataset.name) - defaultVehicleOrder.indexOf(second.dataset.name));
-            }
-
-            const originalHeaders = Array.from(headerRow.querySelectorAll('th[data-name]'));
-            const originalCells = rows.map((row) => new Map(originalHeaders.map((header, index) => [header.dataset.name, row.cells[index + 1]])));
-            headers.forEach((header) => headerRow.appendChild(header));
-            rows.forEach((row, rowIndex) => {
-                headers.forEach((header) => row.appendChild(originalCells[rowIndex].get(header.dataset.name)));
-            });
-
-            headers.forEach((header, vehicleIndex) => {
-                const matches = (!query || header.dataset.name.toLowerCase().includes(query))
-                    && (!selectedType || header.dataset.type === selectedType)
-                    && (!maxPrice || Number(header.dataset.price) <= maxPrice);
-                header.hidden = !matches;
-                if (matches) {
-                    matchCount += 1;
+                if (sortOrder === 'name') {
+                    orderedHeaders.sort((first, second) => first.dataset.name.localeCompare(second.dataset.name));
+                } else if (sortOrder === 'price-low') {
+                    orderedHeaders.sort((first, second) => Number(first.dataset.price) - Number(second.dataset.price));
+                } else if (sortOrder === 'price-high') {
+                    orderedHeaders.sort((first, second) => Number(second.dataset.price) - Number(first.dataset.price));
+                } else {
+                    orderedHeaders.sort((first, second) => defaultIndexByName.get(first.dataset.name) - defaultIndexByName.get(second.dataset.name));
                 }
 
-                rows.forEach((row) => {
-                    const cell = row.cells[vehicleIndex + 1];
-                    if (cell) {
-                        cell.hidden = !matches;
+                return orderedHeaders;
+            };
+
+            vehicleSearchForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                const query = document.getElementById('searchVehicle').value.trim().toLowerCase();
+                const selectedType = document.getElementById('vehicleType').value;
+                const maxPrice = Number(document.getElementById('price').value || 0);
+                const rows = Array.from(vehicleTable.querySelectorAll('tbody tr'));
+                const sortOrder = document.getElementById('sortVehicles')?.value || 'default';
+                const resultStatus = document.getElementById('vehicleSearchStatus');
+                const orderedHeaders = sortHeaders(defaultHeaders, sortOrder);
+                let matchCount = 0;
+
+                const headerFragment = document.createDocumentFragment();
+                orderedHeaders.forEach((header) => headerFragment.appendChild(header));
+                headerRow.innerHTML = '';
+                headerRow.appendChild(headerFragment);
+
+                orderedHeaders.forEach((header) => {
+                    const matches = (!query || header.dataset.name.toLowerCase().includes(query))
+                        && (!selectedType || header.dataset.type === selectedType)
+                        && (!maxPrice || Number(header.dataset.price) <= maxPrice);
+                    header.hidden = !matches;
+
+                    if (matches) {
+                        matchCount += 1;
                     }
                 });
-            });
 
-            if (resultStatus) {
-                resultStatus.textContent = `${matchCount} vehicle${matchCount === 1 ? '' : 's'} match your search.`;
-            }
-        });
+                rows.forEach((row) => {
+                    const firstCell = row.firstElementChild;
+                    const originalCells = Array.from(row.children).slice(1);
+                    const reorderedCells = document.createDocumentFragment();
+
+                    if (firstCell) {
+                        reorderedCells.appendChild(firstCell);
+                    }
+
+                    orderedHeaders.forEach((header) => {
+                        const originalIndex = defaultHeaders.indexOf(header);
+                        const cell = originalCells[originalIndex];
+                        if (cell) {
+                            reorderedCells.appendChild(cell);
+                        }
+                    });
+
+                    row.innerHTML = '';
+                    row.appendChild(reorderedCells);
+
+                    const visibleCells = Array.from(row.children).slice(1);
+                    visibleCells.forEach((cell, index) => {
+                        const correspondingHeader = orderedHeaders[index];
+                        if (!correspondingHeader) {
+                            return;
+                        }
+
+                        const matches = (!query || correspondingHeader.dataset.name.toLowerCase().includes(query))
+                            && (!selectedType || correspondingHeader.dataset.type === selectedType)
+                            && (!maxPrice || Number(correspondingHeader.dataset.price) <= maxPrice);
+                        cell.hidden = !matches;
+                    });
+                });
+
+                if (resultStatus) {
+                    resultStatus.textContent = `${matchCount} vehicle${matchCount === 1 ? '' : 's'} match your search.`;
+                }
+            });
+        }
     }
 });
